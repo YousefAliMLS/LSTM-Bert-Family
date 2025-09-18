@@ -1,0 +1,123 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{amssymb}
+\usepackage{tabularx}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\title{Research Report: LoRA and QLoRA}
+\author{Yousef Mahmoud Ali}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Low-Rank Adaptation (LoRA) and Quantized Low-Rank Adaptation (QLoRA) are parameter-efficient fine-tuning methods that enable efficient adaptation of large language models. LoRA reduces the number of trainable parameters by using low-rank decomposition, while QLoRA extends this approach with quantization techniques, enabling fine-tuning of extremely large models on consumer hardware. These methods have revolutionized how we approach fine-tuning of large-scale models.
+\end{abstract}
+
+\section{Introduction}
+
+The increasing size of language models (e.g., GPT-3 with 175B parameters, PaLM with 540B parameters) has made full fine-tuning computationally prohibitive. Traditional fine-tuning methods require storing and updating all model parameters, which is infeasible for most researchers and practitioners.
+
+\section{LoRA (Low-Rank Adaptation)}
+
+\subsection{Theoretical Foundation}
+
+LoRA is based on the hypothesis that the weight updates during fine-tuning have low intrinsic rank. For a pre-trained weight matrix $W_0 \in \mathbb{R}^{d \times k}$, the update can be represented as:
+\begin{equation}
+W = W_0 + \Delta W = W_0 + BA
+\end{equation}
+Where $B \in \mathbb{R}^{d \times r}$, $A \in \mathbb{R}^{r \times k}$, and $r \ll \min(d,k)$.
+
+\subsection{Architecture}
+
+Instead of updating all parameters of the pre-trained model, LoRA introduces small low-rank matrices that capture task-specific knowledge. This means the original model weights remain frozen, while only a tiny fraction of parameters are trained, significantly reducing memory and compute requirements.
+
+\subsection{Key Advantages}
+
+\begin{itemize}
+\item \textbf{Parameter Efficiency}: Reduces trainable parameters by 100-1000x
+\item \textbf{Memory Efficiency}: No need to store optimizer states for all parameters
+\item \textbf{Flexibility}: Can be applied to any linear layer in transformer architecture
+\item \textbf{Composability}: Multiple LoRA adapters can be combined or switched
+\end{itemize}
+
+\section{QLoRA (Quantized LoRA)}
+
+\subsection{Quantization Techniques}
+
+QLoRA introduces several quantization innovations:
+
+\subsubsection{4-bit NormalFloat (NF4)}
+A theoretically optimal quantization data type for normally distributed weights:
+\begin{equation}
+q_i = \frac{1}{2}(Q_{\mathcal{N}(0,1)}(\frac{i}{2^n}) + Q_{\mathcal{N}(0,1)}(\frac{i+1}{2^n}))
+\end{equation}
+
+\subsubsection{Double Quantization}
+Quantizing the quantization constants for additional memory savings.
+
+\subsubsection{Paged Optimizers}
+Using NVIDIA unified memory to handle memory spikes during training.
+
+\subsection{Performance Comparison}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Method} & \textbf{Memory Usage} & \textbf{Performance} & \textbf{Trainable Parameters} \\
+\midrule
+Full Fine-tuning & 100\% & 100\% & 100\% \\
+LoRA & 20-30\% & 98-99\% & 0.1-1\% \\
+QLoRA & 5-10\% & 97-98\% & 0.1-1\% \\
+\bottomrule
+\end{tabular}
+\caption{Comparison of fine-tuning methods}
+\end{table}
+
+\section{Applications}
+
+\subsection{LoRA Applications}
+\begin{itemize}
+\item Multi-task learning with task-specific adapters
+\item Rapid prototyping and experimentation
+\item Personalization of language models
+\item Domain adaptation
+\end{itemize}
+
+\subsection{QLoRA Applications}
+\begin{itemize}
+\item Fine-tuning 65B+ parameter models on single GPUs
+\item Research with limited computational resources
+\item Democratizing access to large model fine-tuning
+\end{itemize}
+
+\section{Limitations and Future Directions}
+
+\subsection{Limitations}
+\begin{itemize}
+\item Potential performance degradation on complex tasks
+\item Hyperparameter sensitivity (rank selection)
+\item Integration complexity with existing frameworks
+\end{itemize}
+
+\subsection{Future Directions}
+\begin{itemize}
+\item Automatic rank selection algorithms
+\item Dynamic rank adaptation
+\item Integration with other efficiency techniques
+\item Hardware-aware optimizations
+\end{itemize}
+
+\section{Conclusion}
+
+LoRA and QLoRA represent significant advancements in parameter-efficient fine-tuning. LoRA's low-rank adaptation approach provides an elegant solution to the parameter efficiency problem, while QLoRA's quantization techniques enable fine-tuning of massive models on consumer hardware. These methods have democratized access to large language model fine-tuning and opened new possibilities for research and application development.
+
+\end{document}

@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{booktabs}
+
+\title{Research Report: LoRA and QLoRA}
+\author{Yousef Mahmoud Ali}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This report introduces two modern methods for fine-tuning large language models: LoRA and QLoRA. 
+Both are designed to make fine-tuning more efficient, but they use different ideas. 
+LoRA reduces the number of trainable parameters by using low-rank decomposition, 
+while QLoRA adds quantization techniques to make training possible even on normal GPUs. 
+This report explains their concepts, advantages, limitations, and applications in simple terms.
+\end{abstract}
+
+\section{Introduction}
+Large language models like GPT-3 or PaLM are very powerful but also very expensive to fine-tune. 
+They contain billions of parameters, which makes training require huge memory and expensive hardware. 
+To solve this problem, researchers developed methods that allow fine-tuning without needing to update all parameters. 
+Two of these methods are LoRA and QLoRA.
+
+\section{LoRA (Low-Rank Adaptation)}
+\subsection{Main Idea}
+LoRA is based on the observation that weight updates during fine-tuning often lie in a low-dimensional space. 
+Instead of training a full weight matrix, LoRA trains two much smaller matrices. 
+This reduces the number of trainable parameters by a large factor.
+
+\subsection{Advantages}
+\begin{itemize}
+    \item Saves memory because only small matrices are trained.
+    \item Can be applied to many layers of a transformer.
+    \item Multiple LoRA adapters can be combined, which makes it flexible.
+\end{itemize}
+
+\subsection{Limitations}
+\begin{itemize}
+    \item Accuracy might be slightly lower than full fine-tuning.
+    \item Needs good choice of rank $r$ to balance between efficiency and performance.
+\end{itemize}
+
+\section{QLoRA (Quantized LoRA)}
+\subsection{Main Idea}
+QLoRA builds on LoRA by adding \textbf{quantization}. 
+Quantization means representing weights in lower precision (like 4-bit instead of 16-bit). 
+This makes it possible to fine-tune very large models (up to 65B parameters) on a single modern GPU.
+
+\subsection{Key Techniques}
+\begin{itemize}
+    \item \textbf{4-bit NormalFloat (NF4):} A quantization method designed for normally distributed weights.
+    \item \textbf{Double Quantization:} Even quantizes the constants used in quantization for more memory savings.
+    \item \textbf{Paged Optimizers:} Uses smart memory management to avoid crashes from memory spikes.
+\end{itemize}
+
+\subsection{Advantages}
+\begin{itemize}
+    \item Makes it possible to fine-tune huge models on consumer hardware.
+    \item Uses very little GPU memory compared to normal fine-tuning.
+    \item Maintains high accuracy despite heavy compression.
+\end{itemize}
+
+\subsection{Limitations}
+\begin{itemize}
+    \item Quantization can sometimes slightly reduce precision.
+    \item More complex setup compared to LoRA.
+\end{itemize}
+
+\section{Comparison of LoRA and QLoRA}
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{Feature} & \textbf{LoRA} & \textbf{QLoRA} \\
+\midrule
+Main Goal & Reduce trainable parameters & Fine-tune huge models on small GPUs \\
+Key Idea & Low-rank decomposition & LoRA + quantization \\
+Memory Usage & Medium & Very low \\
+Hardware Needs & Moderate GPU & Even consumer GPUs \\
+\bottomrule
+\end{tabular}
+\caption{Comparison between LoRA and QLoRA}
+\end{table}
+
+\section{Applications}
+\subsection{LoRA Applications}
+\begin{itemize}
+    \item Domain adaptation (e.g., medical or legal text).
+    \item Personalized chatbots and assistants.
+    \item Multi-task learning using different adapters.
+\end{itemize}
+
+\subsection{QLoRA Applications}
+\begin{itemize}
+    \item Fine-tuning 65B+ parameter models on a single GPU.
+    \item Research for people with limited hardware.
+    \item Making large models accessible to smaller companies and universities.
+\end{itemize}
+
+\section{Conclusion}
+LoRA and QLoRA are two important steps in making large language models easier and cheaper to fine-tune. 
+LoRA focuses on reducing trainable parameters through low-rank adaptation, 
+while QLoRA goes further by adding quantization to make massive models possible to train on regular GPUs. 
+Both methods are now widely used in the NLP community because they balance efficiency with performance.
+
+\end{document}

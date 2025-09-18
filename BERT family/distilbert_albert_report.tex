@@ -1,0 +1,116 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{booktabs}
+
+\title{Research Report: DistilBERT and ALBERT}
+\author{Yousef Mahmoud Ali}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This report explains two models from the BERT family: DistilBERT and ALBERT. 
+Both are designed to make BERT more efficient, but they do so in different ways. 
+DistilBERT focuses on reducing the size of the model while keeping most of its performance, 
+while ALBERT focuses on parameter sharing and reducing memory usage. 
+This paper explains their goals, methods, advantages, limitations, and applications in simple terms.
+\end{abstract}
+
+\section{Introduction}
+BERT (Bidirectional Encoder Representations from Transformers) is one of the most important models in natural language processing (NLP). 
+It showed how powerful transformers can be for tasks like classification, translation, and question answering. 
+But BERT is very large and expensive to train and use. 
+Because of this, smaller and more efficient versions were developed, such as DistilBERT and ALBERT.
+
+\section{DistilBERT}
+\subsection{Idea Behind DistilBERT}
+DistilBERT is a smaller version of BERT that keeps around 95\% of its performance while using 40\% fewer parameters. 
+It was created by a method called \textbf{knowledge distillation}, which means transferring knowledge from a big model (the teacher, BERT) into a smaller model (the student, DistilBERT).
+
+\subsection{How it Works}
+The student model learns not only from the original data but also from the outputs of the teacher model. 
+This helps the smaller model mimic the teacher’s behavior without needing all its size. 
+DistilBERT has 6 layers instead of 12 in BERT, but it is trained carefully to stay close in accuracy.
+
+\subsection{Advantages}
+\begin{itemize}
+    \item Faster and smaller, which makes it good for real-time applications.
+    \item Uses less memory, so it can run on normal hardware like laptops or mobile devices.
+    \item Keeps most of BERT’s accuracy.
+\end{itemize}
+
+\subsection{Limitations}
+\begin{itemize}
+    \item Slightly less accurate than full BERT.
+    \item Still requires large datasets and teacher models to train properly.
+\end{itemize}
+
+\subsection{Applications}
+\begin{itemize}
+    \item Chatbots and virtual assistants where speed is important.
+    \item Mobile applications with limited resources.
+    \item Real-time translation and summarization tools.
+\end{itemize}
+
+\section{ALBERT}
+\subsection{Idea Behind ALBERT}
+ALBERT stands for \textbf{A Lite BERT}. 
+It is not about making BERT shorter like DistilBERT, but about making it more memory efficient. 
+It reduces the number of parameters while keeping the same number of layers.
+
+\subsection{How it Works}
+ALBERT uses two main tricks:
+\begin{itemize}
+    \item \textbf{Parameter Sharing:} Instead of having separate parameters for each layer, ALBERT reuses them across layers.
+    \item \textbf{Factorized Embedding Parameterization:} It breaks the embedding layer into two smaller matrices, which reduces the number of parameters drastically.
+\end{itemize}
+
+\subsection{Advantages}
+\begin{itemize}
+    \item Much smaller in memory size compared to BERT.
+    \item Faster training because fewer parameters need to be updated.
+    \item Despite being smaller, ALBERT achieves results close to or even better than BERT in some benchmarks.
+\end{itemize}
+
+\subsection{Limitations}
+\begin{itemize}
+    \item More difficult to train because of parameter sharing.
+    \item Sometimes less flexible compared to standard BERT.
+\end{itemize}
+
+\subsection{Applications}
+\begin{itemize}
+    \item Large-scale NLP tasks where memory is limited.
+    \item Research environments with limited GPU resources.
+    \item Deployments where model size matters, like cloud-based services.
+\end{itemize}
+
+\section{Comparison Between DistilBERT and ALBERT}
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{Feature} & \textbf{DistilBERT} & \textbf{ALBERT} \\
+\midrule
+Main Goal & Smaller, faster version & Reduce memory size \\
+Method & Knowledge distillation & Parameter sharing + factorization \\
+Layers & 6 (half of BERT) & Same as BERT but shared \\
+Performance & 95\% of BERT & Close to or better than BERT \\
+\bottomrule
+\end{tabular}
+\caption{Simple comparison of DistilBERT and ALBERT}
+\end{table}
+
+\section{Conclusion}
+DistilBERT and ALBERT are two different ways to make BERT models more efficient. 
+DistilBERT reduces the number of layers and uses knowledge distillation, while ALBERT focuses on memory efficiency with parameter sharing. 
+Both approaches make large language models easier to use in real-world applications without always needing powerful hardware. 
+Together, they show how research is moving towards making NLP models smaller, faster, and more accessible to everyone.
+
+\end{document}
