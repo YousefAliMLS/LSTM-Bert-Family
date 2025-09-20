@@ -18,8 +18,8 @@ from io import BytesIO
 from PyPDF2 import PdfReader, PdfWriter
 
 data = pd.read_csv('cellula toxic data  (1).csv')
-text = data['query'].values
-label = data['Toxic Category'].values
+X = data['query'].values
+Target = data['Toxic Category'].values
 
 labelEncoder = LabelEncoder()
 label_Encoded = labelEncoder.fit_transform(label)
