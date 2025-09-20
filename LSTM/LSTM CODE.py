@@ -52,7 +52,6 @@ cm = confusion_matrix(y_true_class, y_pred_class)
 
 pdf_path = r"C:\Users\Al Badr\Desktop\Cellula_1week_[Yousef_Mahmoud_Ali]\LSTM\LSTM_results.pdf"
 
-# Create the PDF with plots first
 with PdfPages(pdf_path) as pdf:
     plt.figure(figsize=(10,8))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=labelEncoder.classes_, yticklabels=labelEncoder.classes_)
